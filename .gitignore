@@ -3,3 +3,8 @@
 data.json
 zinobe.db
 docker-volume/
+__pycache__/
+libs/__pycache__/
+models/__pycache__/
+services/__pycache__/
+tests/__pycache__/
