@@ -32,22 +32,6 @@ paths:
           schema:
             items:
               $ref: "#/definitions/Message"
-      security:
-        - zinobe_auth:
-          - "read:countries"
-
-securityDefinitions:
-  zinobe_auth:
-    type: "oauth2"
-    authorizationUrl: https://github.com/login/oauth/authorize
-    flow: "implicit"
-    scopes:
-      read:countries: "read list countries"
-  api_key:
-    type: "apiKey"
-    name: "api_key"
-    in: "header"
-
 
 
 definitions:
