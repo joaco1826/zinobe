@@ -1,0 +1,8 @@
+requests
+pandas
+mongoengine
+mongoengine_goodjson
+connexion[swagger-ui]
+pytest
+pytest-runner
+pytest-cov

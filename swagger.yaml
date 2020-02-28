@@ -1,0 +1,68 @@
+swagger: "2.0"
+info:
+  title: Zinobe REST Service
+  version: "1.0.0"
+  x-free-access: true
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+#host: "test-gpssignal.altoassurance.com"
+basePath: "/api/v1/"
+
+paths:
+
+  /countries:
+    get:
+      operationId: "services.Controller.Controller.list_countries"
+      tags:
+        - "countries"
+      summary: "get list of countries"
+      description: ""
+      responses:
+        200:
+          description: "List of countries"
+        400:
+          description: "Bad Request"
+          schema:
+            items:
+              $ref: "#/definitions/Message"
+        500:
+          description: "Internal server error"
+          schema:
+            items:
+              $ref: "#/definitions/Message"
+      security:
+        - zinobe_auth:
+          - "read:countries"
+
+securityDefinitions:
+  zinobe_auth:
+    type: "oauth2"
+    authorizationUrl: https://github.com/login/oauth/authorize
+    flow: "implicit"
+    scopes:
+      read:countries: "read list countries"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+
+
+
+definitions:
+
+  Message:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        description: "Response message"
+        example: "This is a message from server"
+      message_type:
+        type: "string"
+        description: "Error type according with the operation result"
+        example: "info"
+        enum:
+          - "info"
+          - "error"

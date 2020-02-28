@@ -1,0 +1,25 @@
+version: '3.5'
+services:
+  zinobe:
+    container_name: zinobe
+    restart: on-failure
+    build: .
+    env_file: .env
+    volumes:
+      - .:/app-run
+    ports:
+      - "8001:8000"
+
+  mongo:
+    container_name: zinobe_mongo
+    image: mongo
+    restart: "no"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - './docker-volume/mongodb:/data/db'
+    ports:
+      - "27017:27017"
+    depends_on:
+      - zinobe
