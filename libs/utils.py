@@ -35,7 +35,10 @@ class Utils:
         df = pd.DataFrame(data)
 
         # Insert times in sqlite
-        Utils.insert_sql(df['time'].sum(), df['time'].mean(), df['time'].min(), df['time'].max())
+        Utils.time_save(df['time'].sum(), df['time'].mean(), df['time'].min(), df['time'].max())
+
+        # Insert data in sqlite
+        Utils.country_save(df.to_dict('records'))
 
         # Generate data.json
         df.to_json(r'data.json', orient='records')
@@ -45,12 +48,22 @@ class Utils:
         return True
 
     @staticmethod
-    def insert_sql(total, mean, min, max):
+    def time_save(total, mean, min, max):
         connection = Utils.sql_connection()
-        Utils.sql_table(connection)
+        Utils.create_table_times(connection)
         cursor_obj = connection.cursor()
         cursor_obj.execute('''INSERT INTO times(total, mean, min, max) VALUES(?, ?, ?, ?)''', (total, mean, min, max))
         return connection.commit()
+
+    @staticmethod
+    def country_save(data):
+        connection = Utils.sql_connection()
+        Utils.create_table_countries(connection)
+        for obj in data:
+            cursor_obj = connection.cursor()
+            cursor_obj.execute('''INSERT INTO countries(region, country, language, time) VALUES(?, ?, ?, ?)''', (obj['region'], obj['country'], obj['language'], obj['time']))
+            connection.commit()
+        return True
 
     @staticmethod
     def sql_connection():
@@ -63,7 +76,7 @@ class Utils:
             raise
 
     @staticmethod
-    def sql_table(connection):
+    def create_table_times(connection):
         cursor_obj = connection.cursor()
         cursor_obj.execute("CREATE TABLE IF NOT EXISTS times ("
                            "id integer PRIMARY KEY, "
@@ -71,4 +84,15 @@ class Utils:
                            "mean float, "
                            "min float, "
                            "max float)")
+        return connection.commit()
+
+    @staticmethod
+    def create_table_countries(connection):
+        cursor_obj = connection.cursor()
+        cursor_obj.execute("CREATE TABLE IF NOT EXISTS countries ("
+                           "id integer PRIMARY KEY, "
+                           "region varchar(30), "
+                           "country varchar(50), "
+                           "language varchar(100), "
+                           "time float)")
         return connection.commit()

@@ -14,11 +14,14 @@ class TestZinobe(unittest.TestCase):
     def test_sql_connection(self):
         self.assertTrue(Utils.sql_connection())
 
-    def test_sql_table(self):
-        self.assertIsNone(Utils.sql_table(Utils.sql_connection()))
+    def test_create_table_time(self):
+        self.assertIsNone(Utils.create_table_times(Utils.sql_connection()))
 
-    def test_insert_sql(self):
-        self.assertIsNone(Utils.insert_sql(0.5, 0.25, 0.25, 0.25))
+    def test_create_table_countries(self):
+        self.assertIsNone(Utils.create_table_countries(Utils.sql_connection()))
+
+    def test_time_save(self):
+        self.assertIsNone(Utils.time_save(0.5, 0.25, 0.25, 0.25))
 
     def test_data_frame(self):
         data = {
